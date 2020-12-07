@@ -20,8 +20,14 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), map_options);
     // Add Marker at the center
     addMarker(map_options.center);
-    for (i=0; i<user_settings.markers.length; i++) {
-        console.log("addMarker: " + JSON.stringify(user_settings.markers[i]));
-        addMarker(user_settings.markers[i]);
+    for (i=0; i<markers.length; i++) {
+        console.log("addMarker: " + JSON.stringify(markers[i].pos));
+        let marker = addMarker(markers[i].pos);
+        let infoWindow = new google.maps.InfoWindow({
+            content: "<h4>" + markers[i].name + "</h4>"
+        });
+        marker.addListener("click", function(){
+            infoWindow.open(map, marker);
+        });
     }
 }

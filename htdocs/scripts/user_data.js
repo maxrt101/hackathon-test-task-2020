@@ -1,5 +1,5 @@
 /* user_data.js by maxrt101 */
-var default_user_settings = {markers: [], map: {zoom: 12, center: {lat: 49.842957, lng: 24.031111}}};
+var default_user_settings = {markers: [], map: {zoom: 8, center: {lat: 49.842957, lng: 24.031111}}};
 var user_settings;
 
 function storeUserSettings() {
