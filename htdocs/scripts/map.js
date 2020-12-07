@@ -3,8 +3,8 @@
 var map;
 var markers = {};
 
-const markerIconDefault = "./resources/marker_default.png";
-const markerIconVisited = "./resources/marker_visited.png";
+const markerIconDefault = './resources/marker_default.png';
+const markerIconVisited = './resources/marker_visited.png';
 
 function markerIcon(path) {
     return {
@@ -15,7 +15,7 @@ function markerIcon(path) {
 }
 
 function createMarker(name, pos) {
-    page_log("Adding marker at {" + pos.lat + ", " + pos.lng + "}");
+    page_log('Adding marker at {' + pos.lat + ', ' + pos.lng + '}');
     markers[name] = new google.maps.Marker({
         position: pos,
         map: map,
@@ -51,24 +51,20 @@ function initMap() {
     // Get User Settings
     config.load();
     var map_options = config.session.map;
-    page_log("Initialising map at {" + map_options.center.lat + ", " + map_options.center.lng + "} zoom: " + map_options.zoom);
+    page_log('Initialising map at {' + map_options.center.lat + ', ' + map_options.center.lng + '} zoom: ' + map_options.zoom);
     // Create a Google Map
-    map = new google.maps.Map(document.getElementById("map"), map_options);
+    map = new google.maps.Map(document.getElementById('map'), map_options);
     // Add event listeners
-    map.addListener("zoom_changed", function(){
+    map.addListener('zoom_changed', function(){
         config.session.map.zoom = map.getZoom();
         config.save();
     });
-    map.addListener("center_changed", function(){
+    map.addListener('center_changed', function(){
         config.session.map.center = map.getCenter();
         config.save();
     });
-    // Add Place Markers
+    // Create Place Markers
     for (i=0; i<markersData.length; i++) {
         createInfoWindowMarker(markersData[i]);
-    }
-    // Add User Markers
-    for (i=0; i<config.session.markers.length; i++) {
-        createMarker(config.session.markers[i]);
     }
 }
