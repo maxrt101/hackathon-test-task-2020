@@ -11,23 +11,39 @@ function addMarker(pos) {
     return marker;
 }
 
+function addInfoMarker(marker_cfg) {
+    let marker = addMarker(marker_cfg.pos);
+    let infoWindow = new google.maps.InfoWindow({
+        content: "<dev class='marker-info'><h6>" + marker_cfg.name + "</h6></dev>"
+    });
+    marker.addListener("click", function(){
+        infoWindow.open(map, marker);
+    });
+    return marker;
+}
+
 function initMap() {
     // Get User Settings
-    loadUserSettings();
-    var map_options = user_settings.map;
+    config.load();
+    var map_options = config.session.map;
     page_log("Initialising map at {" + map_options.center.lat + ", " + map_options.center.lng + "}");
-    // Create a map
+    // Create a Google Map
     map = new google.maps.Map(document.getElementById("map"), map_options);
-    // Add Marker at the center
-    addMarker(map_options.center);
+    // Add event listeners
+    map.addListener("zoom_changed", function(){
+        config.session.map.zoom = map.getZoom();
+        config.save();
+    });
+    map.addListener("center_changed", function(){
+        config.session.map.center = map.getCenter();
+        config.save();
+    });
+    // Add Place Markers
     for (i=0; i<markers.length; i++) {
-        console.log("addMarker: " + JSON.stringify(markers[i].pos));
-        let marker = addMarker(markers[i].pos);
-        let infoWindow = new google.maps.InfoWindow({
-            content: "<h4>" + markers[i].name + "</h4>"
-        });
-        marker.addListener("click", function(){
-            infoWindow.open(map, marker);
-        });
+        addInfoMarker(markers[i]);
+    }
+    // Add User Markers
+    for (i=0; i<config.session.markers.length; i++) {
+        addMarker(config.session.markers[i]);
     }
 }

@@ -2,3 +2,8 @@
     width: auto;
     height: 600px;
 }
+
+.marker-info {
+    width: 350px;
+    overflow: scroll;
+}
