@@ -1,25 +1,39 @@
 /* map.js by maxrt101 */
 
 var map;
+var markers = {};
 
-function addMarker(pos, icon_img="./resources/marker_default.png") {
-    page_log("Adding marker at {" + pos.lat + ", " + pos.lng + "}");
-    var marker = new google.maps.Marker({
-        position: pos,
-        map: map,
-        icon: {
-            url: icon_img,
-            origin: new google.maps.Point(0, 0),
-            scaledSize: new google.maps.Size(25, 25)
-        }
-    });
-    return marker;
+const markerIconDefault = "./resources/marker_default.png";
+const markerIconVisited = "./resources/marker_visited.png";
+
+function markerIcon(path) {
+    return {
+        url: path,
+        origin: new google.maps.Point(0, 0),
+        scaledSize: new google.maps.Size(25, 25)
+    };
 }
 
-function addInfoMarker(marker_cfg) {
-    let marker = addMarker(marker_cfg.pos, (config.session.visited[marker_cfg.name] === true) ? "./resources/marker_visited.png" : "./resources/marker_default.png");
+function createMarker(name, pos) {
+    page_log("Adding marker at {" + pos.lat + ", " + pos.lng + "}");
+    markers[name] = new google.maps.Marker({
+        position: pos,
+        map: map,
+        icon: markerIcon(markerIconDefault)
+    });
+    return markers[name];
+}
+
+function createInfoWindowMarker(markerProps) {
+    let marker = createMarker(markerProps.name, markerProps.pos);
+    if (config.session.visited[markerProps.name] === true) marker.setIcon(markerIcon(markerIconVisited));
     let infoWindow = new google.maps.InfoWindow({
-        content: "<div class='marker-info'><h6>" + marker_cfg.name + "</h6><button type='button' class='btn btn-primary' onclick='setVisited(\"" + marker_cfg.name + "\")'>Set Visited</button></div>"
+        content: `
+            <div class='marker-info'>
+                <h6>${markerProps.name}</h6>
+                <button type='button' class='btn btn-primary' style='float: right;' onclick='setVisited("${markerProps.name}")'>Mark Visited</button>
+            </div>
+        `
     });
     marker.addListener("click", function(){
         infoWindow.open(map, marker);
@@ -27,16 +41,17 @@ function addInfoMarker(marker_cfg) {
     return marker;
 }
 
-function setVisited(marker_name) {
-    config.session.visited[marker_name] = true;
+function setVisited(markerName) {
+    config.session.visited[markerName] = true;
     config.save();
+    markers[markerName].setIcon(markerIcon(markerIconVisited));
 }
 
 function initMap() {
     // Get User Settings
     config.load();
     var map_options = config.session.map;
-    page_log("Initialising map at {" + map_options.center.lat + ", " + map_options.center.lng + "}");
+    page_log("Initialising map at {" + map_options.center.lat + ", " + map_options.center.lng + "} zoom: " + map_options.zoom);
     // Create a Google Map
     map = new google.maps.Map(document.getElementById("map"), map_options);
     // Add event listeners
@@ -49,11 +64,11 @@ function initMap() {
         config.save();
     });
     // Add Place Markers
-    for (i=0; i<markers.length; i++) {
-        addInfoMarker(markers[i]);
+    for (i=0; i<markersData.length; i++) {
+        createInfoWindowMarker(markersData[i]);
     }
     // Add User Markers
     for (i=0; i<config.session.markers.length; i++) {
-        addMarker(config.session.markers[i]);
+        createMarker(config.session.markers[i]);
     }
 }

@@ -19,3 +19,11 @@ a {
 #content {
     padding: 20px;
 }
+
+#footer {
+    text-align: right;
+    width: auto;
+    height: 50px;
+    padding-top: 10px;
+    padding-right: 20px;
+}
