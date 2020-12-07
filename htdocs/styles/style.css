@@ -1,0 +1,21 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: white;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+}
+
+#container {
+    background-color: #f6f8fa;
+    width: 55%;
+    height: max-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#content {
+    padding: 20px;
+}

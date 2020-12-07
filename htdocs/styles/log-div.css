@@ -1,0 +1,11 @@
+/* log-div.css */
+
+#log-div {
+    font-family:'Courier New', Courier, monospace;
+    background-color: #e1e4e8; /*d1d5da*/
+    overflow: scroll;
+    padding: 10px;
+    margin: 0px;
+    width: 50%;
+    height: 350px;
+}
