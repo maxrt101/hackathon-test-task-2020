@@ -1,7 +1,7 @@
 /* config.js by maxrt101 */
 
 var config = {
-    default: {markers: [], map: {zoom: 8, center: markers[0].pos}},
+    default: {markers: [], visited: {}, map: {zoom: 8, center: markers[0].pos}},
     session: {},
     save: function() {
         //page_log("Saving user settings: " + JSON.stringify(this.session));
@@ -23,4 +23,3 @@ var config = {
         }
     }
 };
-
