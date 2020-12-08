@@ -1,70 +1,57 @@
 /* map.js by maxrt101 */
 
 var map;
-var markers = {};
-
-const markerIconDefault = './resources/marker_default.png';
-const markerIconVisited = './resources/marker_visited.png';
-
-function markerIcon(path) {
-    return {
-        url: path,
-        origin: new google.maps.Point(0, 0),
-        scaledSize: new google.maps.Size(25, 25)
-    };
-}
-
-function createMarker(name, pos) {
-    page_log('Adding marker at {' + pos.lat + ', ' + pos.lng + '}');
-    markers[name] = new google.maps.Marker({
-        position: pos,
-        map: map,
-        icon: markerIcon(markerIconDefault)
-    });
-    return markers[name];
-}
-
-function createInfoWindowMarker(markerProps) {
-    let marker = createMarker(markerProps.name, markerProps.pos);
-    if (config.session.visited[markerProps.name] === true) marker.setIcon(markerIcon(markerIconVisited));
-    let infoWindow = new google.maps.InfoWindow({
-        content: `
-            <div class='marker-info'>
-                <h6>${markerProps.name}</h6>
-                <button type='button' class='btn btn-primary' style='float: right;' onclick='setVisited("${markerProps.name}")'>Mark Visited</button>
-            </div>
-        `
-    });
-    marker.addListener("click", function(){
-        infoWindow.open(map, marker);
-    });
-    return marker;
-}
-
-function setVisited(markerName) {
-    config.session.visited[markerName] = true;
-    config.save();
-    markers[markerName].setIcon(markerIcon(markerIconVisited));
-}
 
 function initMap() {
     // Get User Settings
-    config.load();
+    config.loadIfNotLoaded();
     var map_options = config.session.map;
-    page_log('Initialising map at {' + map_options.center.lat + ', ' + map_options.center.lng + '} zoom: ' + map_options.zoom);
+    pageLog('Initialising map at {' + map_options.center.lat + ', ' + map_options.center.lng + '} zoom: ' + map_options.zoom);
+
     // Create a Google Map
     map = new google.maps.Map(document.getElementById('map'), map_options);
-    // Add event listeners
+
+    // Add zoom_changed Event Listener 
     map.addListener('zoom_changed', function(){
         config.session.map.zoom = map.getZoom();
         config.save();
     });
+
+    // Add center_changed Event Listener
     map.addListener('center_changed', function(){
         config.session.map.center = map.getCenter();
         config.save();
     });
+
+    // Add click Event Listener
+    map.addListener("click", function(event) {
+        if (userMarkerState == 0) { // 0 means no user markers yet, so create the first one
+            createMarker({
+                record: {name: "P1", pos: {"lat": event.latLng.lat(), "lng": event.latLng.lng()}},
+                icon: markerIconUser,
+                draggable: true,
+                info: false
+            });
+            // markers["P1"].addListener("dragend", function(innerEvent){});
+            userMarkerState = 1;
+        } else if (userMarkerState == 1) { // 1 means there are already one user marker, so create another one
+            createMarker({
+                record: {name: "P2", pos: {"lat": event.latLng.lat(), "lng": event.latLng.lng()}},
+                icon: markerIconUser,
+                draggable: true,
+                info: false
+            });
+            // markers["P2"].addListener("dragend", function(innerEvent){});
+            userMarkerState = 2;
+        } // if 2 user markers are present, do nothing
+    });
+
     // Create Place Markers
-    for (i=0; i<markersData.length; i++) {
-        createInfoWindowMarker(markersData[i]);
+    for (i = 0; i < markersData.length; i++) {
+        createMarker({
+            record: markersData[i],
+            icon: config.session.visited[markersData[i].name] ? markerIconVisited : markerIconDefault,
+            info: true
+        });
     }
 }
