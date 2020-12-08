@@ -7,14 +7,39 @@ var directionsRenderer;
 var userMarkerCount = 0;
 var userMarkerId = 0;
 
+
+function addUserMarker(pos) {
+    if (userMarkerCount == 2 && !config.session.allowManyRouteMarkers) {
+        return;
+    }
+    let name = "URP" + (++userMarkerId); // URP = User Route Point(Marker)
+    userMarkerCount++;
+    createMarker({
+        record: {name: name, pos: pos},
+        icon: markerIconUser,
+        draggable: true,
+        info: `
+            <div class='marker-info'>
+                <h6>Route Marker #${userMarkerId}</h6>
+                <button type='button' class='btn btn-primary' style='float: right;' onclick='deleteUserMarker("${name}")'>Delete</button>
+            </div>
+        `
+    });
+    // markers[name].addListener("dragend", function(event){});
+    addToRoute(pos);
+    return name
+}
+
 function deleteUserMarker(name) {
+    let pos = markers[name].getPosition();
+    removeFromRoute({lat: pos.latLng.lat(), lng: pos.latLng.lng()});
     deleteMarker(name);
     userMarkerCount--;
 }
 
 function resetUserMarkers() {
     for ([key, value] of Object.entries(markers)) {
-        if (key.startsWith('URP') && key.length < 6) { // Temporary check. "UBP".length:3 + 3 digits
+        if (key.startsWith('URP')) {
             deleteMarker(key);
         }
     }
@@ -52,27 +77,10 @@ function initMap() {
 
     // Add click Event Listener
     map.addListener("click", function(event) {
-        if (userMarkerCount == 2 && !config.session.allowManyRouteMarkers) {
-            return;
-        }
-
-        let name = "URP" + (++userMarkerId);
-
-        userMarkerCount++;
-
-        createMarker({
-            record: {name: name, pos: {"lat": event.latLng.lat(), "lng": event.latLng.lng()}},
-            icon: markerIconUser,
-            draggable: true,
-            info: true,
-            infoContent: `
-                <div class='marker-info'>
-                    <h6>Route Marker #${userMarkerId}</h6>
-                    <button type='button' class='btn btn-primary' style='float: right;' onclick='deleteUserMarker("${name}")'>Delete</button>
-                </div>
-            `
+        addUserMarker({
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
         });
-        // markers[name].addListener("dragend", function(event){});
     });
 
     // Create Place Markers
@@ -80,7 +88,14 @@ function initMap() {
         createMarker({
             record: markersData[i],
             icon: config.session.visited[markersData[i].name] ? markerIconVisited : markerIconDefault,
-            info: true
+            info: `
+                <div class='marker-info'>
+                    <h6>${markersData[i].name}</h6>
+                    <button type='button' class='btn btn-primary' style='float: right;' onclick='setVisited("${markersData[i].name}")'>Mark Visited</button>
+                    <div class='marker-info-pad'></div>
+                    <button type='button' class='btn btn-primary' style='float: right;' onclick='addToRoute(markersData.find(element => element.name == "${markersData[i].name}").pos)'>Add to Route</button>
+                </div>
+            `
         });
     }
 }

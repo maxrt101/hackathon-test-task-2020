@@ -6,6 +6,7 @@ const markerIconDefault = './resources/marker_default.png';
 const markerIconVisited = './resources/marker_visited.png';
 const markerIconUser    = './resources/marker_user.png';
 
+
 function markerIcon(path) {
     return {
         url: path,
@@ -27,12 +28,7 @@ function createMarker(props) {
     });
     if (props.info) {
         let infoWindow = new google.maps.InfoWindow({
-            content: props.infoContent ? props.infoContent : `
-                <div class='marker-info'>
-                    <h6>${rec.name}</h6>
-                    <button type='button' class='btn btn-primary' style='float: right;' onclick='setVisited("${rec.name}")'>Mark Visited</button>
-                </div>
-            `
+            content: props.info 
         });
         markers[rec.name].addListener("click", function(){
             infoWindow.open(map, markers[rec.name]);

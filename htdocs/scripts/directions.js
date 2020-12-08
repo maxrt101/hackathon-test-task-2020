@@ -1,9 +1,26 @@
 /* directions.js by maxrt101 */
 
+/* Route */
+
+var routeCoords = [];
+
+function addToRoute(pos) {
+    routeCoords.push(pos);
+}
+
+function removeFromRoute(pos) {
+    let index = routeCoords.indexOf(5);
+    if (index > -1) {
+        routeCoords.splice(index, 1);
+    }
+}
+
+
+/* Directions */
+
 function clearRouteRenderer() {
     directionsRenderer.setMap(null);
     for ([key, value] of Object.entries(markers)) {
-        console.log(key, value);
         if (key.startsWith("WP")) {
             deleteMarker(key);
         }
@@ -29,17 +46,15 @@ function renderUserPointDirections(drawOverviewPath=false) {
     var points = [];
     var start, end;
     // Get points
-    for ([key, value] of Object.entries(markers)) {
+    for (let i = 0; i < routeCoords.length; i++) {
         // User markers should be in order
-        if (key.startsWith("URP")) {
-            points.push({
-                location: value.getPosition(),,
-                stopover: true
-            });
-        }
+        points.push({
+            location: routeCoords[i],
+            stopover: true
+        });
     }
     // Render
-    if (points.length >= 2) { // change
+    if (points.length >= 2) {
         start = points[0].location;
         end = points[points.length-1].location;
         result = renderDirections({
@@ -51,12 +66,10 @@ function renderUserPointDirections(drawOverviewPath=false) {
             avoidHighways: false
         }, function(result){
             pageLog("Route constructed successfuly");
-            console.log(result);
             /* result.routes[0].overview_path - Array of latLng waypoints */
             if (drawOverviewPath) {
                 let overviewPath = result.routes[0].overview_path;
                 for (let i = 0; i < overviewPath.length; i++) {
-                    console.log(i, overviewPath[i]);
                     createMarker({
                         record: {
                             name: "WP" + i,
@@ -66,7 +79,7 @@ function renderUserPointDirections(drawOverviewPath=false) {
                         info: false
                     });
                 }
-            }
+            } // drawOverviewPath
         });
     } else {
         alert("Select at least 2 points, by clicking at the map.");
