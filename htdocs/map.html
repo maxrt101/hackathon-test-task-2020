@@ -40,9 +40,9 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" onclick="renderUserPointDirections()" href="#">Calculate route</a>
                                 <a class="dropdown-item" onclick="renderUserPointDirections(true)" href="#">Calculate route and draw waypoints</a>
-                                <!-- <a class="dropdown-item" onclick="config.load()" href="#">Save</a> -->
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" onclick="clearRouteRenderer()" href="#">Clear route</a>
+                                <a class="dropdown-item" onclick="resetUserMarkers()" href="#">Clear User Markers</a>
+                                <a class="dropdown-item" onclick="clearRouteRenderer()" href="#">Clear Route</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -53,8 +53,6 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" onclick="config.save()" href="#">Save Data</a>
                                 <a class="dropdown-item" onclick="window.localStorage.clear()" href="#">Clear Data</a>
-                                <!-- <a class="dropdown-item" onclick="condig.save()" href="#">Load</a>
-                                <a class="dropdown-item" onclick="window.localStorage.clear()" href="#">Clear</a> -->
                             </div>
                         </li>
                     </ul>

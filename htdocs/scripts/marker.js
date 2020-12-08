@@ -1,7 +1,6 @@
 /* marker.js by maxrt101 */
 
 var markers = {};
-var userMarkerCount = 0;
 
 const markerIconDefault = './resources/marker_default.png';
 const markerIconVisited = './resources/marker_visited.png';

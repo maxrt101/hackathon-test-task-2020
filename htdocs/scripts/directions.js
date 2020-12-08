@@ -26,10 +26,26 @@ function renderDirections(request, resultCallback) {
 
 function renderUserPointDirections(drawOverviewPath=false) {
     var result;
-    if (markers["P1"] && markers["P2"]) {
+    var points = [];
+    var start, end;
+    // Get points
+    for ([key, value] of Object.entries(markers)) {
+        // User markers should be in order
+        if (key.startsWith("URP")) {
+            points.push({
+                location: value.getPosition(),,
+                stopover: true
+            });
+        }
+    }
+    // Render
+    if (points.length >= 2) { // change
+        start = points[0].location;
+        end = points[points.length-1].location;
         result = renderDirections({
-            origin: markers["P1"].getPosition(),
-            destination: markers["P2"].getPosition(),
+            origin: start,
+            destination: end,
+            waypoints: (points.length > 2) ? points.slice(1, points.length-1) : null,
             travelMode: "DRIVING",
             unitSystem: google.maps.UnitSystem.METRIC,
             avoidHighways: false
@@ -53,7 +69,7 @@ function renderUserPointDirections(drawOverviewPath=false) {
             }
         });
     } else {
-        alert("Select 2 points, by clicking at the map.");
+        alert("Select at least 2 points, by clicking at the map.");
     }
 
 }

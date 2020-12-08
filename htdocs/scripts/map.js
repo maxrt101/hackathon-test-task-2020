@@ -4,6 +4,24 @@ var map;
 var directionsService;
 var directionsRenderer;
 
+var userMarkerCount = 0;
+var userMarkerId = 0;
+
+function deleteUserMarker(name) {
+    deleteMarker(name);
+    userMarkerCount--;
+}
+
+function resetUserMarkers() {
+    for ([key, value] of Object.entries(markers)) {
+        if (key.startsWith('URP') && key.length < 6) { // Temporary check. "UBP".length:3 + 3 digits
+            deleteMarker(key);
+        }
+    }
+    userMarkerCount = 0;
+    userMarkerId = 0;
+}
+
 function initMap() {
     // Get User Settings
     config.loadIfNotLoaded();
@@ -38,7 +56,9 @@ function initMap() {
             return;
         }
 
-        let name = "P" + (++userMarkerCount);
+        let name = "URP" + (++userMarkerId);
+
+        userMarkerCount++;
 
         createMarker({
             record: {name: name, pos: {"lat": event.latLng.lat(), "lng": event.latLng.lng()}},
@@ -47,8 +67,8 @@ function initMap() {
             info: true,
             infoContent: `
                 <div class='marker-info'>
-                    <h6>Route Marker #${userMarkerCount}</h6>
-                    <button type='button' class='btn btn-primary' style='float: right;' onclick='deleteMarker("${name}")'>Delete</button>
+                    <h6>Route Marker #${userMarkerId}</h6>
+                    <button type='button' class='btn btn-primary' style='float: right;' onclick='deleteUserMarker("${name}")'>Delete</button>
                 </div>
             `
         });
