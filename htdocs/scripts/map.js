@@ -1,6 +1,8 @@
 /* map.js by maxrt101 */
 
 var map;
+var directionsService;
+var directionsRenderer;
 
 function initMap() {
     // Get User Settings
@@ -10,6 +12,13 @@ function initMap() {
 
     // Create a Google Map
     map = new google.maps.Map(document.getElementById('map'), map_options);
+
+    // Create required directions api instances
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+
+    // Set map for DirectionsRenderer
+    directionsRenderer.setMap(map);
 
     // Add zoom_changed Event Listener 
     map.addListener('zoom_changed', function(){

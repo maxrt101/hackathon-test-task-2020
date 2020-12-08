@@ -16,7 +16,7 @@ function markerIcon(path) {
 }
 
 function createMarker(props) {
-    /** @param: props {record: { name: "", pos: {}, icon: "", info: true, draggable: false, animation: null} */
+    /** @param: props {record: { name: "", pos: {}, icon: "", info: true, infoContent: "" draggable: false, animation: null} */
     let rec = props.record;
     pageLog("Created marker at {" + rec.pos.lat + ", " + rec.pos.lng + "}");
     markers[rec.name] = new google.maps.Marker({
@@ -28,7 +28,7 @@ function createMarker(props) {
     });
     if (props.info) {
         let infoWindow = new google.maps.InfoWindow({
-            content: `
+            content: props.infoContens ? props.infoContens : `
                 <div class='marker-info'>
                     <h6>${rec.name}</h6>
                     <button type='button' class='btn btn-primary' style='float: right;' onclick='setVisited("${rec.name}")'>Mark Visited</button>
