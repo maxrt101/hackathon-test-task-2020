@@ -28,7 +28,7 @@ function createMarker(props) {
     });
     if (props.info) {
         let infoWindow = new google.maps.InfoWindow({
-            content: props.infoContens ? props.infoContens : `
+            content: props.infoContent ? props.infoContent : `
                 <div class='marker-info'>
                     <h6>${rec.name}</h6>
                     <button type='button' class='btn btn-primary' style='float: right;' onclick='setVisited("${rec.name}")'>Mark Visited</button>
