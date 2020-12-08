@@ -84,6 +84,9 @@ function initMap() {
     });
 
     // Create Place Markers
+    /**
+     * @todo: make dynamic buttons, so when the user presses 'Add to Route', button changes to 'Remove from Route' and vice versa
+    */
     for (i = 0; i < markersData.length; i++) {
         createMarker({
             record: markersData[i],
