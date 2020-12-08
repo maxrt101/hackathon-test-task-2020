@@ -1,7 +1,7 @@
 /* config.js by maxrt101 */
 
 var config = {
-    default: {visited: {}, showDebugConsole: false, map: { zoom: 8, center: markersData[0].pos }},
+    default: {visited: {}, showDebugConsole: false, allowManyRouteMarkers: false, map: { zoom: 8, center: markersData[0].pos }},
     session: {},
     loaded: false,
 

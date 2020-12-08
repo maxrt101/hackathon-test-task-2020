@@ -4,6 +4,8 @@
     font-family:'Courier New', Courier, monospace;
     background-color: #e1e4e8; /*d1d5da*/
     overflow: scroll;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     padding: 10px;
     margin: 0px;
     width: 100%; /* 50% */

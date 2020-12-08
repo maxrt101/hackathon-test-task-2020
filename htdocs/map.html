@@ -49,6 +49,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" onclick="toggleShowDebugConsole()" href="#">Toggle debug console</a>
+                                <a class="dropdown-item" onclick="toggleAllowManyUserMarkers()" href="#">Toggle allowManyRouteMarkers</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" onclick="config.save()" href="#">Save Data</a>
                                 <a class="dropdown-item" onclick="window.localStorage.clear()" href="#">Clear Data</a>
@@ -63,7 +64,7 @@
                 <h1>Interactive Map</h1>
                 <div id="map" class="rounded img-thumbnail"></div>
                 <h2 id="dbg-title" style="margin-top: 10px; display: none;">Debug Console:</h2>
-                <div id="log-div" class="rounded" style="display: none;"></div>
+                <div id="log-div" class="rounded" style="display: none;"><p></p></div>
                 <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQ8r8sfg8SeZ66naMjhUC1zT4nIXFhbAk&callback=initMap"></script>
             </div>
             <div id="footer">
@@ -71,6 +72,9 @@
             </div>
         </div>
         <script>
+            function toggleAllowManyUserMarkers() {
+                config.session.allowManyRouteMarkers = !config.session.allowManyRouteMarkers;
+            }
             function setDebugDivDisplay() {
                 if (config.session.showDebugConsole) {
                     document.getElementById("log-div").style.display = "block";

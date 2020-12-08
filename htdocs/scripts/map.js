@@ -34,25 +34,25 @@ function initMap() {
 
     // Add click Event Listener
     map.addListener("click", function(event) {
-        if (userMarkerState == 0) { // 0 means no user markers yet, so create the first one
-            createMarker({
-                record: {name: "P1", pos: {"lat": event.latLng.lat(), "lng": event.latLng.lng()}},
-                icon: markerIconUser,
-                draggable: true,
-                info: false
-            });
-            // markers["P1"].addListener("dragend", function(innerEvent){});
-            userMarkerState = 1;
-        } else if (userMarkerState == 1) { // 1 means there are already one user marker, so create another one
-            createMarker({
-                record: {name: "P2", pos: {"lat": event.latLng.lat(), "lng": event.latLng.lng()}},
-                icon: markerIconUser,
-                draggable: true,
-                info: false
-            });
-            // markers["P2"].addListener("dragend", function(innerEvent){});
-            userMarkerState = 2;
-        } // if 2 user markers are present, do nothing
+        if (userMarkerCount == 2 && !config.session.allowManyRouteMarkers) {
+            return;
+        }
+
+        let name = "P" + (++userMarkerCount);
+
+        createMarker({
+            record: {name: name, pos: {"lat": event.latLng.lat(), "lng": event.latLng.lng()}},
+            icon: markerIconUser,
+            draggable: true,
+            info: true,
+            infoContent: `
+                <div class='marker-info'>
+                    <h6>Route Marker #${userMarkerCount}</h6>
+                    <button type='button' class='btn btn-primary' style='float: right;' onclick='deleteMarker("${name}")'>Delete</button>
+                </div>
+            `
+        });
+        // markers[name].addListener("dragend", function(event){});
     });
 
     // Create Place Markers

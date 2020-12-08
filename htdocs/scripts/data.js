@@ -1,4 +1,6 @@
-markersData = [
+/* data.js */
+
+var markersData = [
     {
         name: "Lviv",
         pos: {lat: 49.842957, lng: 24.031111}

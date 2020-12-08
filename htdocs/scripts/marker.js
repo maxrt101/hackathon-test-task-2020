@@ -1,7 +1,7 @@
 /* marker.js by maxrt101 */
 
 var markers = {};
-var userMarkerState = 0;
+var userMarkerCount = 0;
 
 const markerIconDefault = './resources/marker_default.png';
 const markerIconVisited = './resources/marker_visited.png';
@@ -41,6 +41,11 @@ function createMarker(props) {
     }
     return markers[rec.name];
 }
+
+function deleteMarker(name) {
+    markers[name].setMap(null);
+    delete markers[name];
+} 
 
 function setVisited(markerName) {
     config.session.visited[markerName] = true;

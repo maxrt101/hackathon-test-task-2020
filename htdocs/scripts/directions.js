@@ -1,5 +1,15 @@
 /* directions.js by maxrt101 */
 
+function clearRouteRenderer() {
+    directionsRenderer.setMap(null);
+    for ([key, value] of Object.entries(markers)) {
+        console.log(key, value);
+        if (key.startsWith("WP")) {
+            deleteMarker(key);
+        }
+    }
+}
+
 function renderDirections(request, resultCallback) {
     pageLog("Requesting route for: " + JSON.stringify(request));
     directionsService.route(request, function(result, status){
@@ -14,17 +24,6 @@ function renderDirections(request, resultCallback) {
     });
 }
 
-function clearRouteRenderer() {
-    directionsRenderer.setMap(null);
-    for ([key, value] of Object.entries(markers)) {
-        console.log(key, value);
-        if (key.startsWith("WP")) {
-            value.setMap(null);
-            delete markers[key];
-        }
-    }
-}
-
 function renderUserPointDirections(drawOverviewPath=false) {
     var result;
     if (markers["P1"] && markers["P2"]) {
@@ -37,7 +36,7 @@ function renderUserPointDirections(drawOverviewPath=false) {
         }, function(result){
             pageLog("Route constructed successfuly");
             console.log(result);
-            /* result.routes[0].overview_path - Array of {lat, lng} waypoints */
+            /* result.routes[0].overview_path - Array of latLng waypoints */
             if (drawOverviewPath) {
                 let overviewPath = result.routes[0].overview_path;
                 for (let i = 0; i < overviewPath.length; i++) {
@@ -48,13 +47,7 @@ function renderUserPointDirections(drawOverviewPath=false) {
                             pos: {lat: overviewPath[i].lat(), lng: overviewPath[i].lng()}
                         },
                         icon: markerIconUser,
-                        info: true,
-                        infoContent: `
-                            <div class="marker-info">
-                                <h6>${"WP"+i}</h6>
-                                <p>This is route waypoint</p>
-                            </div>
-                        `,
+                        info: false
                     });
                 }
             }
