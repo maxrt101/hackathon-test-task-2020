@@ -11,9 +11,7 @@ function addToRoute(pos) {
 function removeFromRoute(pos) {
     if (routeCoords.length > 0) {
         let index = routeCoords.indexOf(pos);
-        //console.log(pos);
         for (let i = 0; i < routeCoords.length; i++) {
-            //console.log(i, routeCoords[i], routeCoords[i].lat == pos.lat, routeCoords[i].lng == pos.lng);
             if (routeCoords[i].lat == pos.lat && routeCoords[i].lng == pos.lng) {
                 index = i;
                 break;

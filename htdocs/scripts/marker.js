@@ -20,7 +20,6 @@ function prepareInfoWindow(window, markerName) {
     window.contentLoaded = true;
     let markerData = markersData.find(element => element.name == markerName);
     let content = window.getContent();
-    //console.log(markerData);
     window.setContent(
         content.slice(0, content.indexOf("#")) + 
         `<img src="${markerData.img}" style="max-width:100%; height: auto;" alt="img"><p style="margin-top: 5px;">${markerData.text}</p>` +

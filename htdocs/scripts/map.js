@@ -14,7 +14,6 @@ function addUserMarker(pos) {
     }
     let name = "URP" + (++userMarkerId); // URP = User Route Point(Marker)
     userMarkerCount++;
-    //console.log(name);
     createMarker({
         record: {name: name, pos: pos},
         icon: markerIconUser,
@@ -33,8 +32,6 @@ function addUserMarker(pos) {
 
 function deleteUserMarker(name) {
     let pos = markers[name].getPosition();
-    //console.log(name);
-    //console.log(pos);
     removeFromRoute({lat: pos.lat(), lng: pos.lng()});
     deleteMarker(name);
     userMarkerCount--;
