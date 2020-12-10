@@ -1,7 +1,7 @@
 /* config.js by maxrt101 */
 
 var config = {
-    default: {visited: {}, showDebugConsole: false, allowManyRouteMarkers: false, closePrevWindow: false, map: { zoom: 6, center: {lat: 48.72047815236502, lng: 31.53918196250001} }}, // Center of Ukraine map
+    default: {visited: {}, showDebugConsole: false, allowManyRouteMarkers: true, closePrevWindow: false, map: { zoom: 6, center: {lat: 48.72047815236502, lng: 31.53918196250001} }}, // Center of Ukraine map
     session: {},
     loaded: false,
 
