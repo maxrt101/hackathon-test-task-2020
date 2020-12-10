@@ -14,11 +14,12 @@ function addUserMarker(pos) {
     }
     let name = "URP" + (++userMarkerId); // URP = User Route Point(Marker)
     userMarkerCount++;
-    console.log(name);
+    //console.log(name);
     createMarker({
         record: {name: name, pos: pos},
         icon: markerIconUser,
         draggable: true,
+        animation: google.maps.Animation.DROP,
         info: `
             <div class='marker-info'>
                 <h6>Route Marker #${userMarkerId}</h6>
@@ -26,15 +27,14 @@ function addUserMarker(pos) {
             </div>
         `
     });
-    // markers[name].addListener("dragend", function(event){});
     addToRoute(pos);
     return name
 }
 
 function deleteUserMarker(name) {
-    console.log(name);
     let pos = markers[name].getPosition();
-    console.log(pos);
+    //console.log(name);
+    //console.log(pos);
     removeFromRoute({lat: pos.lat(), lng: pos.lng()});
     deleteMarker(name);
     userMarkerCount--;
@@ -86,8 +86,8 @@ function initMap() {
         });
     });
 
-    // Create Place Markers
     /**
+     * Create Place Markers
      * @todo: make dynamic buttons, so when the user presses 'Add to Route', button changes to 'Remove from Route' and vice versa
     */
     for (let i = 0; i < markersData.length; i++) {
@@ -95,19 +95,20 @@ function initMap() {
             createMarker({
                 record: markersData[i],
                 icon: config.session.visited[markersData[i].name] ? markerIconVisited : markerIconDefault,
+                userMarker: true,
+                animation: google.maps.Animation.DROP,
                 info: `
                     <div class='marker-info'>
                         <h6>${markersData[i].name}</h6>
-                        <img src="${markersData[i].img}" style="max-width:100%; height: auto;" alt="img">
-                        <p>${markersData[i].text}</p>
+                        #
                         <button type='button' class='btn btn-primary' style='float: right;' onclick='toggleVisited("${markersData[i].name}")'>Mark Visited</button>
                         <div class='marker-info-pad'></div>
-                        <button type='button' class='btn btn-primary' style='float: right;' onclick='addToRoute(markersData.find(element => element.name == "${markersData[i].name}").pos)'>Add to Route</button>
+                        <button type='button' class='btn btn-primary' style='float: right;' onclick='toggleAddToRouteName("${markersData[i].name}")'>Add to Route</button>
                     </div>
                 `
             });
         } catch(e) {
-            pageLog("Wiki Request Error");
+            pageLog("Error creating marker");
             console.log(e);
         }
     }

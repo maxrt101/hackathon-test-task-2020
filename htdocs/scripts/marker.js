@@ -1,6 +1,7 @@
 /* marker.js by maxrt101 */
 
 var markers = {};
+var prevInfoWindow = false;
 
 const markerIconDefault = './resources/marker_default.png';
 const markerIconVisited = './resources/marker_visited.png';
@@ -15,8 +16,20 @@ function markerIcon(path) {
     };
 }
 
-function createMarker(props) {
-    /** @param: props {record: { name: "", pos: {}, icon: "", info: true, infoContent: "" draggable: false, animation: null} */
+function prepareInfoWindow(window, markerName) {
+    window.contentLoaded = true;
+    let markerData = markersData.find(element => element.name == markerName);
+    let content = window.getContent();
+    //console.log(markerData);
+    window.setContent(
+        content.slice(0, content.indexOf("#")) + 
+        `<img src="${markerData.img}" style="max-width:100%; height: auto;" alt="img"><p style="margin-top: 5px;">${markerData.text}</p>` +
+        content.slice(content.indexOf("#")+1, content.length)
+    );
+}
+
+async function createMarker(props) {
+    /** @param: props {record: { name: "", pos: {}, icon: "", info: "", userMarker:false, infoContent: "" draggable: false, animation: null} */
     let rec = props.record;
     pageLog("Created marker at {" + rec.pos.lat + ", " + rec.pos.lng + "}");
     markers[rec.name] = new google.maps.Marker({
@@ -30,8 +43,16 @@ function createMarker(props) {
         let infoWindow = new google.maps.InfoWindow({
             content: props.info 
         });
+        infoWindow.contentLoaded = false;
         markers[rec.name].addListener("click", () => {
+            if (props.userMarker)
+                if (!infoWindow.contentLoaded)
+                    prepareInfoWindow(infoWindow, rec.name);
+            if (config.session.closePrevWindow)
+                if (prevInfoWindow)
+                    prevInfoWindow.close();
             infoWindow.open(map, markers[rec.name]);
+            prevInfoWindow = infoWindow;
         });
     }
     return markers[rec.name];

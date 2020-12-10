@@ -61,14 +61,23 @@
             </div>
         </div>
         <script>
+            function loadData(name, id) {
+                let data = markersData.find(element => element.name == name);
+                document.getElementById(id).innerHTML = `
+                    <div class="card card-body">
+                        <img src="${data.img}" style="max-width:100%; height: auto;" alt="img"><p style="margin-top: 5px;">${data.text}</p>
+                    </div>
+                `;
+            }
             function showAll() {
                 let html = "";
                 for (let i = 0; i < markersData.length; i++) {
                     html += `
                         <div style="padding: 5px;">
-                            <h5>${markersData[i].name}</h5>
+                            <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" onclick="loadData(\`${markersData[i].name}\`, 'collapse${i}')" data-target="#collapse${i}" aria-expanded="false" aria-controls="collapseExample">${markersData[i].name}</button>
+                            <div class="collapse" id="collapse${i}"></div>
                         </div>
-                    `
+                    `;
                 }
                 document.getElementById("place-list").innerHTML = html;
             }
@@ -76,11 +85,13 @@
                 let html = "";
                 let visited = Object.keys(config.session.visited);
                 for (let i = 0; i < visited.length; i++) {
+                    let data = markersData.find(element => element.name == visited[i]);
                     html += `
                         <div style="padding: 5px;">
-                            <h5>${visited[i]}</h5>
+                            <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" onclick="loadData('${markersData[i].name}', 'collapse${i}')" data-target="#collapse${i}" aria-expanded="false" aria-controls="collapseExample">${data.name}</button>
+                            <div class="collapse" id="collapse${i}"></div>
                         </div>
-                    `
+                    `;
                 }
                 document.getElementById("place-list").innerHTML = html;
             }

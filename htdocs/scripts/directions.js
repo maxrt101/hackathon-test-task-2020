@@ -11,9 +11,9 @@ function addToRoute(pos) {
 function removeFromRoute(pos) {
     if (routeCoords.length > 0) {
         let index = routeCoords.indexOf(pos);
-        console.log(pos);
+        //console.log(pos);
         for (let i = 0; i < routeCoords.length; i++) {
-            console.log(i, routeCoords[i], routeCoords[i].lat == pos.lat, routeCoords[i].lng == pos.lng);
+            //console.log(i, routeCoords[i], routeCoords[i].lat == pos.lat, routeCoords[i].lng == pos.lng);
             if (routeCoords[i].lat == pos.lat && routeCoords[i].lng == pos.lng) {
                 index = i;
                 break;
@@ -25,6 +25,16 @@ function removeFromRoute(pos) {
             console.warn("removeFromRoute: element index " + index);
         }
     }
+}
+
+function toggleAddToRouteName(name) {
+    if (routeCoords.find(element => element == markers[name].getPosition())) {
+        markers[name].setAnimation(null);
+        removeFromRoute(markers[name].getPosition());
+        return;
+    }
+    markers[name].setAnimation(google.maps.Animation.BOUNCE);
+    addToRoute(markers[name].getPosition());
 }
 
 

@@ -1,14 +1,15 @@
 #map {
     width: auto;
-    height: 600px;
+    height: 800px;
 }
 
 .marker-info {
     width: 350px;
-    overflow: scroll;
+    max-height: 400px;
+    /*overflow: scroll;*/
 }
 
 .marker-info-pad {
     padding: 5px;
-    float:right;
+    float: right;
 }

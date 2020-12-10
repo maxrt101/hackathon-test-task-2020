@@ -55,6 +55,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" onclick="toggleShowDebugConsole()" href="#">Toggle showDebugConsole</a>
                                 <a class="dropdown-item" onclick="toggleAllowManyUserMarkers()" href="#">Toggle allowManyRouteMarkers</a>
+                                <a class="dropdown-item" onclick="toggleClosePrevWindow()" href="#">Toggle closePrevWindow</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" onclick="config.save()" href="#">Save Data</a>
                                 <a class="dropdown-item" onclick="window.localStorage.clear()" href="#">Clear Data</a>
@@ -78,6 +79,9 @@
             function toggleAllowManyUserMarkers() {
                 config.session.allowManyRouteMarkers = !config.session.allowManyRouteMarkers;
                 config.save();
+            }
+            function toggleClosePrevWindow() {
+                config.session.closePrevWindow = !config.session.closePrevWindow;
             }
             $(document).ready(() => {
                 config.loadIfNotLoaded();
