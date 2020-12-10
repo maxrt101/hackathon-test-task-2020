@@ -49,7 +49,11 @@ function setVisited(markerName) {
 }
 
 function toggleVisited(markerName) {
-    config.session.visited[markerName] = !config.session.visited[markerName];
+    if (config.session.visited[markerName]) {
+        delete config.session.visited[markerName];
+    } else {
+        config.session.visited[markerName] = true;
+    }
     config.save();
     markers[markerName].setIcon(markerIcon(config.session.visited[markerName] ? markerIconVisited : markerIconDefault));
 }
