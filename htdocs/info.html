@@ -88,8 +88,8 @@
                     let data = markersData.find(element => element.name == visited[i]);
                     html += `
                         <div style="padding: 5px;">
-                            <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" onclick="loadData('${markersData[i].name}', 'collapse${i}')" data-target="#collapse${i}" aria-expanded="false" aria-controls="collapseExample">${data.name}</button>
-                            <div class="collapse" id="collapse${i}"></div>
+                            <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" onclick="loadData(\`${visited[i]}\`, 'collapse_visited${i}')" data-target="#collapse_visited${i}" aria-expanded="false" aria-controls="collapseExample">${data.name}</button>
+                            <div class="collapse" id="collapse_visited${i}"></div>
                         </div>
                     `;
                 }
