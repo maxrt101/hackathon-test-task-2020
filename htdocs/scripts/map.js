@@ -92,15 +92,14 @@ function initMap() {
     */
     for (let i = 0; i < markersData.length; i++) {
         try {
-            let marker_id = markersData[i].name.replaceAll(" ", "-");
             createMarker({
                 record: markersData[i],
                 icon: config.session.visited[markersData[i].name] ? markerIconVisited : markerIconDefault,
                 info: `
-                    <div id="${marker_id}" class='marker-info'>
+                    <div class='marker-info'>
                         <h6>${markersData[i].name}</h6>
-                        <p></p>
-                        <img src="" alt="img">
+                        <img src="${markersData[i].img}" style="max-width:100%; height: auto;" alt="img">
+                        <p>${markersData[i].text}</p>
                         <button type='button' class='btn btn-primary' style='float: right;' onclick='toggleVisited("${markersData[i].name}")'>Mark Visited</button>
                         <div class='marker-info-pad'></div>
                         <button type='button' class='btn btn-primary' style='float: right;' onclick='addToRoute(markersData.find(element => element.name == "${markersData[i].name}").pos)'>Add to Route</button>
