@@ -14,6 +14,7 @@ function addUserMarker(pos) {
     }
     let name = "URP" + (++userMarkerId); // URP = User Route Point(Marker)
     userMarkerCount++;
+    console.log(name);
     createMarker({
         record: {name: name, pos: pos},
         icon: markerIconUser,
@@ -31,8 +32,10 @@ function addUserMarker(pos) {
 }
 
 function deleteUserMarker(name) {
+    console.log(name);
     let pos = markers[name].getPosition();
-    removeFromRoute({lat: pos.latLng.lat(), lng: pos.latLng.lng()});
+    console.log(pos);
+    removeFromRoute({lat: pos.lat(), lng: pos.lng()});
     deleteMarker(name);
     userMarkerCount--;
 }
@@ -64,19 +67,19 @@ function initMap() {
     directionsRenderer.setMap(map);
 
     // Add zoom_changed Event Listener 
-    map.addListener('zoom_changed', function(){
+    map.addListener('zoom_changed', () => {
         config.session.map.zoom = map.getZoom();
         config.save();
     });
 
     // Add center_changed Event Listener
-    map.addListener('center_changed', function(){
+    map.addListener('center_changed', () => {
         config.session.map.center = map.getCenter();
         config.save();
     });
 
     // Add click Event Listener
-    map.addListener("click", function(event) {
+    map.addListener("click", (event) => {
         addUserMarker({
             lat: event.latLng.lat(),
             lng: event.latLng.lng()
@@ -87,18 +90,27 @@ function initMap() {
     /**
      * @todo: make dynamic buttons, so when the user presses 'Add to Route', button changes to 'Remove from Route' and vice versa
     */
-    for (i = 0; i < markersData.length; i++) {
-        createMarker({
-            record: markersData[i],
-            icon: config.session.visited[markersData[i].name] ? markerIconVisited : markerIconDefault,
-            info: `
-                <div class='marker-info'>
-                    <h6>${markersData[i].name}</h6>
-                    <button type='button' class='btn btn-primary' style='float: right;' onclick='setVisited("${markersData[i].name}")'>Mark Visited</button>
-                    <div class='marker-info-pad'></div>
-                    <button type='button' class='btn btn-primary' style='float: right;' onclick='addToRoute(markersData.find(element => element.name == "${markersData[i].name}").pos)'>Add to Route</button>
-                </div>
-            `
-        });
+    for (let i = 0; i < markersData.length; i++) {
+        try {
+            let marker_id = markersData[i].name.replaceAll(" ", "-");
+            createMarker({
+                record: markersData[i],
+                icon: config.session.visited[markersData[i].name] ? markerIconVisited : markerIconDefault,
+                info: `
+                    <div id="${marker_id}" class='marker-info'>
+                        <h6>${markersData[i].name}</h6>
+                        <p></p>
+                        <img src="" alt="img">
+                        <button type='button' class='btn btn-primary' style='float: right;' onclick='toggleVisited("${markersData[i].name}")'>Mark Visited</button>
+                        <div class='marker-info-pad'></div>
+                        <button type='button' class='btn btn-primary' style='float: right;' onclick='addToRoute(markersData.find(element => element.name == "${markersData[i].name}").pos)'>Add to Route</button>
+                    </div>
+                `
+            });
+        } catch(e) {
+            pageLog("Wiki Request Error");
+            console.log(e);
+        }
     }
 }
+            

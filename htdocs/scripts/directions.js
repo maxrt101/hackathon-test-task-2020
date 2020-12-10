@@ -9,9 +9,21 @@ function addToRoute(pos) {
 }
 
 function removeFromRoute(pos) {
-    let index = routeCoords.indexOf(5);
-    if (index > -1) {
-        routeCoords.splice(index, 1);
+    if (routeCoords.length > 0) {
+        let index = routeCoords.indexOf(pos);
+        console.log(pos);
+        for (let i = 0; i < routeCoords.length; i++) {
+            console.log(i, routeCoords[i], routeCoords[i].lat == pos.lat, routeCoords[i].lng == pos.lng);
+            if (routeCoords[i].lat == pos.lat && routeCoords[i].lng == pos.lng) {
+                index = i;
+                break;
+            }
+        }
+        if (index > -1) {
+            routeCoords = routeCoords.slice(0, index).concat(routeCoords.slice(index+1, routeCoords.length));
+        } else {
+            console.warn("removeFromRoute: element index " + index);
+        }
     }
 }
 
@@ -29,7 +41,7 @@ function clearRouteRenderer() {
 
 function renderDirections(request, resultCallback) {
     pageLog("Requesting route for: " + JSON.stringify(request));
-    directionsService.route(request, function(result, status){
+    directionsService.route(request, (result, status) => {
         pageLog("DirectionsService response: " + status);
         if (status == "OK") {
             directionsRenderer.setMap(map);
@@ -64,7 +76,7 @@ function renderUserPointDirections(drawOverviewPath=false) {
             travelMode: "DRIVING",
             unitSystem: google.maps.UnitSystem.METRIC,
             avoidHighways: false
-        }, function(result){
+        }, (result) => {
             pageLog("Route constructed successfuly");
             /* result.routes[0].overview_path - Array of latLng waypoints */
             if (drawOverviewPath) {

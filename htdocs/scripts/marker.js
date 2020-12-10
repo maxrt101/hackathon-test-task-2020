@@ -30,7 +30,7 @@ function createMarker(props) {
         let infoWindow = new google.maps.InfoWindow({
             content: props.info 
         });
-        markers[rec.name].addListener("click", function(){
+        markers[rec.name].addListener("click", () => {
             infoWindow.open(map, markers[rec.name]);
         });
     }
@@ -46,4 +46,10 @@ function setVisited(markerName) {
     config.session.visited[markerName] = true;
     config.save();
     markers[markerName].setIcon(markerIcon(markerIconVisited));
+}
+
+function toggleVisited(markerName) {
+    config.session.visited[markerName] = !config.session.visited[markerName];
+    config.save();
+    markers[markerName].setIcon(markerIcon(config.session.visited[markerName] ? markerIconVisited : markerIconDefault));
 }
